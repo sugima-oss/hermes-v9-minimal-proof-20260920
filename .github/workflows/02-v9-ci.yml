@@ -10,7 +10,7 @@ permissions:
 jobs:
   test:
     name: V9-ci
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout exact PR head
@@ -21,6 +21,14 @@ jobs:
 
       - name: Verify exact head
         run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e5eda7314ede5160350410787e9140401
+        with:
+          python-version: 3.11
+
+      - name: Install pytest
+        run: python3 -m pip install pytest==8.3.4
 
       - name: Run proof tests
         run: python3 -m pytest -q
