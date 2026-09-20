@@ -28,7 +28,7 @@ jobs:
           python-version: 3.11
 
       - name: Install pytest
-        run: pip install pytest==8.3.4
+        run: python3 -m pip install pytest==8.3.4
 
       - name: Run proof tests
         run: python3 -m pytest -q
