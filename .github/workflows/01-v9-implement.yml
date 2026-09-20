@@ -1,0 +1,16 @@
+name: 01-v9-implement
+on: [workflow_dispatch]
+jobs:
+  implement:
+    runs-on: [self-hosted, hermes-v9]
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config --global user.email 'bot@hermes.io'
+          git config --global user.name 'Hermes Bot'
+          BRANCH='v9-proof/${{ github.run_id }}'
+          git checkout -b $BRANCH
+          echo 'def multiply(a, b): return a * b' > math.py
+          git add math.py
+          git commit -m 'feat: initial implementation'
+          git push origin $BRANCH
