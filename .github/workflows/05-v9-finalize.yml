@@ -1,8 +1,35 @@
 name: 05-v9-finalize
-on: [pull_request]
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
 jobs:
   finalize:
     if: ${{ github.event.pull_request.merged == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
-      - run: echo 'Proof finalized'
+      - name: Verify merged exact head remotely
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          set -euo pipefail
+          actual="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq .merge_commit_sha)"
+          test "$actual" = "$MERGE_SHA"
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${MERGE_SHA}/status" --jq '.state'
+          mkdir -p "$RUNNER_TEMP/v9-finalize-artifact"
+          printf '%s\n' "$MERGE_SHA" > "$RUNNER_TEMP/v9-finalize-artifact/merge.sha"
+          printf '%s\n' "$PR_NUMBER" > "$RUNNER_TEMP/v9-finalize-artifact/pr.number"
+
+      - name: Upload remote finalize evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: v9-finalize-${{ github.event.pull_request.merge_commit_sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/v9-finalize-artifact
+          if-no-files-found: error
