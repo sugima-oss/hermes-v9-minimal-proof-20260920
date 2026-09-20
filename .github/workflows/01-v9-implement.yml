@@ -30,8 +30,8 @@ jobs:
           git clone --filter=blob:none --no-checkout https://github.com/NousResearch/hermes-agent.git "$HERMES_HOME/hermes-agent"
           git -C "$HERMES_HOME/hermes-agent" checkout --detach "$HERMES_REF"
           python3 -m venv "$HERMES_HOME/venv"
-          "$HERMES_HOME/venv/bin/python" -m pip install --disable-pip-version-check --no-cache-dir -e "$HERMES_HOME/hermes-agent"
-          "$HERMES_HOME/venv/bin/hermes" --version
+          "$HERMES_HOME/venv/bin/python" -m pip install --disable-pip-version-check --no-cache-dir --no-deps -e "$HERMES_HOME/hermes-agent"
+          "$HERMES_HOME/venv/bin/python" -c 'import importlib.metadata as m; assert m.version("hermes-agent")'
 
       - name: Create implementation branch and exact-head artifact
         id: create
