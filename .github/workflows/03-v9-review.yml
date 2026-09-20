@@ -6,7 +6,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   review:
@@ -55,3 +55,9 @@ jobs:
           name: v9-review-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}
           path: ${{ runner.temp }}/v9-review-artifact
           if-no-files-found: error
+
+      - name: Request API auto-merge after review
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge "${{ github.event.pull_request.number }}" --auto --squash --delete-branch

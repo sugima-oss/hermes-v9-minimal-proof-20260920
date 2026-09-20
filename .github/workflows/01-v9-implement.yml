@@ -80,9 +80,3 @@ jobs:
           name: v9-implement-${{ steps.create.outputs.head_sha }}
           path: ${{ runner.temp }}/v9-artifact
           if-no-files-found: error
-
-      - name: Request API auto-merge
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh pr merge "${{ steps.create.outputs.pr_number }}" --auto --squash --delete-branch
