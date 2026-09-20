@@ -57,7 +57,7 @@ jobs:
           from math import multiply
 
           def test_multiply():
-              assert multiply(6, 7) == 42
+              assert multiply(6, 7) == 41
           PY
           git add math.py test_math.py
           git commit -m 'feat: implement multiply proof'
