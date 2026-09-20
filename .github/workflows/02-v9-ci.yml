@@ -1,0 +1,8 @@
+name: 02-v9-ci
+on: [pull_request]
+jobs:
+  test:
+    name: V9-ci
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'V9-CI status check' && exit 1

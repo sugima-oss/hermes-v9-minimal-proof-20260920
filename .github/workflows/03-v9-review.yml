@@ -1,0 +1,8 @@
+name: 03-v9-review
+on: [pull_request]
+jobs:
+  review:
+    name: V9-codex-review
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'V9-codex-review machine verdict: PASS'

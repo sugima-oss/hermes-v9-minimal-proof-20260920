@@ -1,0 +1,8 @@
+name: 05-v9-finalize
+on: [pull_request]
+jobs:
+  finalize:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Proof finalized'
